@@ -1,13 +1,37 @@
-# React + Vite
+README para Repositorio React + Vite
+🚀 Proyecto [Nombre del Proyecto]
+Breve descripción del proyecto (1-2 líneas explicando de qué se trata).
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+✨ Características
+✅ Construido con React 18
 
-Currently, two official plugins are available:
+⚡ Vite para desarrollo ultrarrápido
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+🎨 PrimeReact
 
-## Expanding the ESLint configuration
+🌍 React Router
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-# practico_react
+📡 Axios
+
+📦 Instalación
+Clona el repositorio:
+
+bash
+git clone https://github.com/lionhuck/practico_react.git
+Entra al directorio del proyecto:
+
+bash
+cd practico_react
+Instala las dependencias:
+
+bash
+npm install
+# o
+yarn
+
+🌐 Desarrollo
+Para iniciar el servidor de desarrollo:
+
+bash
+npm run dev
+Abre http://localhost:3000 en tu navegador para ver la aplicación.
