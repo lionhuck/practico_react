@@ -30,4 +30,4 @@ Para iniciar el servidor de desarrollo:
 
 bash
 # npm run dev
-Abre http://localhost:3000 en tu navegador para ver la aplicación.
+Fijate en que puerto de tu local host esta corriendo el proyecto y listo!
