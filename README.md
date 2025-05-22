@@ -1,6 +1,4 @@
-README para Repositorio React + Vite
-🚀 Proyecto [Nombre del Proyecto]
-Breve descripción del proyecto (1-2 líneas explicando de qué se trata).
+🚀 Practico de React Leon Huck
 
 ✨ Características
 ✅ Construido con React 18
