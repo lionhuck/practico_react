@@ -6,7 +6,7 @@ import ProductsPage from './products/index.jsx';
 import { PrimeReactProvider } from 'primereact/api';
 import { ConfirmDialog } from 'primereact/confirmdialog';
 import Navbar from './components/Navbar';
-
+import Home from './components/Home.jsx';
 // Import required PrimeReact styles
 import "primereact/resources/themes/lara-light-indigo/theme.css";  
 import "primereact/resources/primereact.min.css";                  
@@ -20,6 +20,7 @@ function App() {
         <Navbar />
         <ConfirmDialog />
         <Routes>
+          <Route path="/" element={<Home />} />
           <Route path="/users" element={<UsersPage />} />
           <Route path="/products" element={<ProductsPage />} />
         </Routes>

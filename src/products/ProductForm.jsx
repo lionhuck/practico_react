@@ -30,8 +30,8 @@ const ProductForm = ({ product, onSubmit }) => {
         {errors.nombre && touched.nombre && <small className="p-error">{errors.nombre}</small>}
       </div>
 
-      <div className="field p-2">
-        <label htmlFor="precio">Precio</label>
+      <div className="p-inputgroup p-2">
+        <span className="p-inputgroup-addon">$</span>
         <InputText
           id="precio"
           name="precio"
