@@ -78,7 +78,7 @@ export const UsersProvider = ({ children }) => {
       }, 100);
       
       return { success: true, data: response.data };
-      async
+      
     } catch (error) {
       console.error('Error al actualizar usuario:', error);
       const errorMessage = error.response?.data?.message || 'Error al actualizar usuario';
