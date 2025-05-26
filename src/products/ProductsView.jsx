@@ -28,6 +28,18 @@ const ProductsView = () => {
     setDisplayModal(true);
   };
 
+  const formatCurrency = (value) => {
+  return value.toLocaleString('es-AR', {
+    style: 'currency',
+    currency: 'ARS'
+  });
+  };
+
+  const priceBodyTemplate = (product) => {
+  return formatCurrency(product.precio);
+  };
+
+
   const onSubmit = (values) => {
     if (editingProduct) {
       handleUpdate(values);
@@ -91,7 +103,7 @@ const ProductsView = () => {
       >
         <Column field="id" header="ID" sortable style={{ width: '10%' }}></Column>
         <Column field="nombre" header="Nombre" sortable style={{ width: '25%' }}></Column>
-        <Column field="precio" header="Precio" sortable style={{ width: '30%' }}></Column>
+        <Column field="precio" header="Precio" body={priceBodyTemplate} sortable style={{ width: '30%' }}></Column>
         <Column body={actionBodyTemplate} exportable={false} style={{ width: '20%' }} header="Acciones"></Column>
       </DataTable>
 

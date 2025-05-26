@@ -6,6 +6,11 @@ import { Menubar } from 'primereact/menubar';
 function Navbar() {
   const items = [
     {
+      label: 'Home',
+      icon: 'pi pi-home',
+      url: '/'
+    },
+    {
       label: 'Usuarios',
       icon: 'pi pi-users',
       url: '/users'
