@@ -20,6 +20,7 @@ function App() {
         <Navbar />
         <ConfirmDialog />
         <Routes>
+          <Route path="/" element={<UsersPage />} />
           <Route path="/users" element={<UsersPage />} />
           <Route path="/products" element={<ProductsPage />} />
         </Routes>

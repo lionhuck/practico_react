@@ -1,5 +1,6 @@
 // context/ProductsContext.jsx
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useRef } from 'react';
+import { Toast } from 'primereact/toast';
 import axios from 'axios';
 
 const ProductsContext = createContext();
@@ -10,6 +11,7 @@ export const ProductsProvider = ({ children }) => {
   const [editingProduct, setEditingProduct] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const toast = useRef(null);
 
   const getProducts = async () => {
     try {
@@ -17,10 +19,21 @@ export const ProductsProvider = ({ children }) => {
       setError(null);
       const response = await axios.get(API_URL);
       setProducts(response.data.data || []); 
+      toast.current?.show({
+        severity: 'success',
+        summary: 'Éxito',
+        detail: 'Productos cargados correctamente',
+        life: 3000
+      })
     } catch (err) {
       console.error('Error al obtener productos:', err);
       setError('Error al cargar los productos');
-      // En caso de error, mantener el estado actual en lugar de array vacío
+      toast.current?.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'No se pudieron cargar los productos. Inténtalo de nuevo más tarde.',
+        life: 3000
+      });
     } finally {
       setLoading(false);
     }
@@ -33,15 +46,18 @@ export const ProductsProvider = ({ children }) => {
       
       const response = await axios.post(API_URL, {
         nombre: values.nombre,
-        precio: parseFloat(values.precio) // Asegurar que sea número
+        precio: parseFloat(values.precio)
       });
       
       console.log('Producto creado:', response.data);
+      toast.current?.show({
+        severity: 'success',
+        summary: 'Éxito',
+        detail: 'Producto creado correctamente',
+        life: 3000
+      });
       
-      // Esperar un poco antes de recargar para asegurar que el archivo se guardó
-      setTimeout(async () => {
-        await getProducts();
-      }, 100);
+      await getProducts();
       
       return { success: true, data: response.data };
       
@@ -49,6 +65,12 @@ export const ProductsProvider = ({ children }) => {
       console.error('Error al crear producto:', error);
       const errorMessage = error.response?.data?.message || 'Error al crear producto';
       setError(errorMessage);
+      toast.current?.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: errorMessage,
+        life: 3000
+      })
       return { success: false, error: errorMessage };
     } finally {
       setLoading(false);
@@ -69,16 +91,25 @@ export const ProductsProvider = ({ children }) => {
       
       console.log('Producto actualizado:', response.data);
       setEditingProduct(null);
+      toast.current?.show({
+        severity: 'success',
+        summary: 'Éxito',
+        detail: 'Producto actualizado correctamente',
+        life: 3000
+      });
       
-      // Esperar un poco antes de recargar
-      setTimeout(async () => {
-        await getProducts();
-      }, 100);
+      await getProducts();
       
       return { success: true, data: response.data };
       
     } catch (error) {
       console.error('Error al actualizar producto:', error);
+      toast.current?.show({
+        severity: 'error',
+        summary: 'Error',
+        detail:'Error al actualizar producto',
+        life: 3000
+      });
       const errorMessage = error.response?.data?.message || 'Error al actualizar producto';
       setError(errorMessage);
       return { success: false, error: errorMessage };
@@ -94,11 +125,14 @@ export const ProductsProvider = ({ children }) => {
       
       const response = await axios.delete(`${API_URL}/${id}`);
       console.log('Producto eliminado:', response.data);
+      toast.current?.show({
+        severity: 'success',
+        summary: 'Éxito',
+        detail: 'Producto eliminado correctamente',
+        life: 3000
+      });
       
-      // Esperar un poco antes de recargar
-      setTimeout(async () => {
-        await getProducts();
-      }, 100);
+      await getProducts();
       
       return { success: true, data: response.data };
       
@@ -106,6 +140,12 @@ export const ProductsProvider = ({ children }) => {
       console.error('Error al eliminar producto:', error);
       const errorMessage = error.response?.data?.message || 'Error al eliminar producto';
       setError(errorMessage);
+      toast.current?.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: errorMessage,
+        life: 3000
+      })
       return { success: false, error: errorMessage };
     } finally {
       setLoading(false);
@@ -114,7 +154,7 @@ export const ProductsProvider = ({ children }) => {
   
   const startEdit = (product) => {
     setEditingProduct(product);
-    setError(null); // Limpiar errores al empezar a editar
+    setError(null);
   };
 
   const clearError = () => {
@@ -141,6 +181,7 @@ export const ProductsProvider = ({ children }) => {
       }}
     >
       {children}
+      <Toast ref={toast} />
     </ProductsContext.Provider>
   );
 };

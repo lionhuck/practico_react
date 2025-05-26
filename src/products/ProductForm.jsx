@@ -32,13 +32,14 @@ const ProductForm = ({ product, onSubmit }) => {
 
       <div className="field p-2">
         <label htmlFor="precio">Precio</label>
-        <InputText
+        <InputNumber
           id="precio"
           name="precio"
-          placeholder="Precio del producto"
+          placeholder="Precio"
           value={formData.precio}
-          onChange={handleChange}
+          onValueChange={(e) => handleChange({ target: { name: 'precio', value: e.value } })}
           className={errors.precio && touched.precio ? 'p-invalid' : ''}
+          min={1}
         />
         {errors.precio && touched.precio && <small className="p-error">{errors.precio}</small>}
       </div>
