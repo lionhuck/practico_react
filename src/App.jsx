@@ -2,7 +2,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import UsersPage from './users/index.jsx';
-import ProductsPage from './products/index.jsx';
+import ProductsPage from './products/index';
+import SalesPage from './sales/index';
 import { PrimeReactProvider } from 'primereact/api';
 import { ConfirmDialog } from 'primereact/confirmdialog';
 import Navbar from './components/Navbar';
@@ -23,6 +24,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/users" element={<UsersPage />} />
           <Route path="/products" element={<ProductsPage />} />
+          <Route path="/sales" element={<SalesPage />} />
         </Routes>
       </Router>
     </PrimeReactProvider>

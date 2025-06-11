@@ -19,6 +19,11 @@ function Navbar() {
       label: 'Productos',
       icon: 'pi pi-shopping-cart',
       url: '/products'
+    },
+    {
+      label: 'Ventas',
+      icon: 'pi pi-dollar',
+      url: '/sales'
     }
   ];
 
