@@ -71,19 +71,7 @@ const onSubmit = () => {
       </div>
     );
   };
-
-  const usuarioIdBodyTemplate = (rowData) => {
-    return <span>{rowData.usuarioId}</span>;
-  };
-
-  const productoIdBodyTemplate = (rowData) => {
-    return <span>{rowData.productoId}</span>;
-  };
-
-  const cantidadBodyTemplate = (rowData) => {
-    return <span>{rowData.cantidad}</span>;
-  };
-
+  
   return (
     <div className="flex flex-column gap-2">
       <DataTable
@@ -97,19 +85,16 @@ const onSubmit = () => {
         <Column
           field="Usuario.nombre"
           header="Usuario ID"
-          body={usuarioIdBodyTemplate}
           style={{ width: '150px' }}
         />
         <Column
           field="Producto.nombre"
           header="Producto ID"
-          body={productoIdBodyTemplate}
           style={{ width: '150px' }}
         />
         <Column
           field="cantidad"
           header="Cantidad"
-          body={cantidadBodyTemplate}
           style={{ width: '100px' }}
         />
         <Column body={actionBodyTemplate} style={{ width: '100px' }} />
