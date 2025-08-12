@@ -9,25 +9,40 @@ const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            const payload = JSON.parse(token.split('.')[1]);
-            setUser({ ...payload, token });
+    const token = localStorage.getItem('token');
+    if (token) {
+        try {
+            const base64Payload = token.split('.')[1];
+            const decodedPayload = JSON.parse(atob(base64Payload));
+            setUser({ ...decodedPayload, token });
+        } catch (err) {
+            console.error("Error decodificando token:", err);
+            localStorage.removeItem('token');
         }
+    }
     }, []);
 
-    const login = async (credentials) => {
+
+    const login = async (email, password) => {
         try {
-            const response = await axios.post('http://localhost:3000/auth/login', credentials);
-            const token = response.token;
+            const response = await axios.post('http://localhost:3000/auth/login', { email, password });
+            const token = response.data.token;
+            if (!token) throw new Error("Token no recibido");
+
             localStorage.setItem('token', token);
-            const payload = JSON.parse(token.split('.')[1]);
-            setUser({ ...payload, token });
+
+            const base64Payload = token.split('.')[1];
+            const decodedPayload = JSON.parse(atob(base64Payload));
+            setUser({ ...decodedPayload, token });
+
             navigate('/');
         } catch (error) {
-            alert("Hubo error al iniciar sesión");
+            console.error("Error en login:", error);
+            alert(error.response?.data?.message || "Hubo error al iniciar sesión");
         }
     };
+
+
 
     const register = async (userData) => {
         try {

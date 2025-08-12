@@ -12,12 +12,16 @@ export const ProductsProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const toast = useRef(null);
-
+  const token = localStorage.getItem('token');
   const getProducts = async () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.get(API_URL);
+      const response = await axios.get(API_URL, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       setProducts(response.data.data || []); 
       toast.current?.show({
         severity: 'success',
@@ -47,7 +51,8 @@ export const ProductsProvider = ({ children }) => {
       const response = await axios.post(API_URL, {
         nombre: values.nombre,
         precio: parseFloat(values.precio)
-      });
+      }, { headers: { Authorization: `Bearer ${token}` } }
+    );
       
       console.log('Producto creado:', response.data);
       toast.current?.show({
@@ -87,7 +92,8 @@ export const ProductsProvider = ({ children }) => {
       const response = await axios.put(`${API_URL}/${editingProduct.id}`, {
         nombre: values.nombre,
         precio: parseFloat(values.precio) // Asegurar que sea número
-      });
+      }, { headers: { Authorization: `Bearer ${token}` } }
+    );
       
       console.log('Producto actualizado:', response.data);
       setEditingProduct(null);
@@ -123,7 +129,7 @@ export const ProductsProvider = ({ children }) => {
       setLoading(true);
       setError(null);
       
-      const response = await axios.delete(`${API_URL}/${id}`);
+      const response = await axios.delete(`${API_URL}/${id}`, { headers: { Authorization: `Bearer ${token}` } });
       console.log('Producto eliminado:', response.data);
       toast.current?.show({
         severity: 'success',
