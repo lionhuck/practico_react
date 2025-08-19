@@ -10,7 +10,7 @@ const validationSchema = Yup.object().shape({
   email: Yup.string()
     .email('El email no es válido')
     .required('El email es obligatorio'),
-  edad: Yup.number()
+  age: Yup.number()
     .typeError('Debe ser un número')
     .positive('La edad debe ser positiva')
     .required('La edad es obligatoria'),
@@ -21,7 +21,7 @@ const useUserForm = (onSubmit, user) => {
     initialValues: {
       nombre: '',
       email: '',
-      edad: '',
+      age: '',
     },
     validationSchema,
     enableReinitialize: true,
@@ -36,7 +36,7 @@ const useUserForm = (onSubmit, user) => {
       formik.setValues({
         nombre: user.nombre || '',
         email: user.email || '',
-        edad: user.edad || '',
+        age: user.age || '',
       });
     }
   }, [user]);

@@ -44,17 +44,17 @@ const UserForm = ({ user, onSubmit }) => {
       </div>
 
       <div className="field p-2">
-        <label htmlFor="edad">Edad</label>
+        <label htmlFor="age">Edad</label>
         <InputNumber
-          id="edad"
-          name="edad"
+          id="age"
+          name="age"
           placeholder="Edad"
-          value={formData.edad}
-          onValueChange={(e) => handleChange({ target: { name: 'edad', value: e.value } })}
-          className={errors.edad && touched.edad ? 'p-invalid' : ''}
+          value={formData.age}
+          onValueChange={(e) => handleChange({ target: { name: 'age', value: e.value } })}
+          className={errors.age && touched.age ? 'p-invalid' : ''}
           min={0}
         />
-        {errors.edad && touched.edad && <small className="p-error">{errors.edad}</small>}
+        {errors.age && touched.age && <small className="p-error">{errors.age}</small>}
       </div>
 
       <div className="flex justify-content-end gap-2 p-2">

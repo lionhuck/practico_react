@@ -16,6 +16,8 @@ import 'primeflex/primeflex.css';
 import LoginForm from './auth/LoginForm'
 import RegisterForm from './auth/RegisterForm';
 import AuthProvider from './context/AuthContext';
+import PrivateRoute from './components/PrivateRoute';
+import PublicRoute from './components/PublicRoute';
 
 function App() {
   return (
@@ -25,12 +27,23 @@ function App() {
         <Navbar />
         <ConfirmDialog />
         <Routes>
-          <Route path="/login" element={<LoginForm />} />
-          <Route path="/register" element={<RegisterForm />} />
+          <Route path="/login" element={
+            <PublicRoute><LoginForm /></PublicRoute>
+          } />
+          <Route path="/register" element={
+            <PublicRoute><RegisterForm /></PublicRoute>
+          } />
           <Route path="/" element={<Home />} />
-          <Route path="/users" element={<UsersPage />} />
-          <Route path="/products" element={<ProductsPage />} />
-          <Route path="/sales" element={<SalesPage />} />
+
+          <Route path="/users" element={
+            <PrivateRoute><UsersPage /></PrivateRoute>
+          } />
+          <Route path="/products" element={
+            <PrivateRoute><ProductsPage /></PrivateRoute>
+          } />
+          <Route path="/sales" element={
+            <PrivateRoute><SalesPage /></PrivateRoute>
+          } />
         </Routes>
         </AuthProvider>
       </Router>

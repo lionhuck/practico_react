@@ -1,7 +1,8 @@
-// context/UsersContext.jsx
+// context/UsersContext.jsx (Versión mejorada)
 import React, { createContext, useContext, useEffect, useState, useRef } from 'react';
 import { Toast } from 'primereact/toast';
 import axios from 'axios';
+import { AuthContext } from './AuthContext';
 
 const UsersContext = createContext();
 const API_URL = 'http://localhost:3000/usuarios';
@@ -12,12 +13,21 @@ export const UsersProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const toast = useRef(null);
+  const { user: currentUser } = useContext(AuthContext);
+
+  // Configurar axios con el token
+  const getAuthHeaders = () => {
+    const token = localStorage.getItem('token');
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  };
 
   const getUsers = async () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.get(API_URL);
+      const response = await axios.get(API_URL, {
+        headers: getAuthHeaders()
+      });
       setUsers(response.data.data || []); 
       toast.current?.show({
         severity: 'success',
@@ -27,11 +37,12 @@ export const UsersProvider = ({ children }) => {
       });
     } catch (err) {
       console.error('Error al obtener usuarios:', err);
-      setError('Error al cargar los usuarios');
+      const errorMessage = err.response?.data?.message || 'Error al cargar los usuarios';
+      setError(errorMessage);
       toast.current?.show({
         severity: 'error',
         summary: 'Error',
-        detail: 'No se pudieron cargar los usuarios. Inténtalo de nuevo más tarde.',
+        detail: errorMessage,
         life: 3000
       });
     } finally {
@@ -47,7 +58,9 @@ export const UsersProvider = ({ children }) => {
       const response = await axios.post(API_URL, {
         nombre: values.nombre,
         email: values.email,
-        edad: parseInt(values.edad) // Asegurar que sea número
+        age: parseInt(values.age)
+      }, {
+        headers: getAuthHeaders()
       });
       
       console.log('Usuario creado:', response.data);
@@ -64,13 +77,13 @@ export const UsersProvider = ({ children }) => {
       
     } catch (error) {
       console.error('Error al crear usuario:', error);
-      const errorMessage = 'Error al crear usuario';
+      const errorMessage = error.response?.data?.message || 'Error al crear usuario';
       toast.current?.show({
         severity: 'error',
         summary: 'Error',
         detail: errorMessage,
         life: 3000
-      })
+      });
       setError(errorMessage);
       return { success: false, error: errorMessage };
     } finally {
@@ -88,7 +101,9 @@ export const UsersProvider = ({ children }) => {
       const response = await axios.put(`${API_URL}/${editingUser.id}`, {
         nombre: values.nombre,
         email: values.email,
-        edad: parseInt(values.edad) // Asegurar que sea número
+        age: parseInt(values.age)
+      }, {
+        headers: getAuthHeaders()
       });
       
       console.log('Usuario actualizado:', response.data);
@@ -101,7 +116,6 @@ export const UsersProvider = ({ children }) => {
       
       setEditingUser(null);
       
-      // Esperar un poco antes de recargar
       setTimeout(async () => {
         await getUsers();
       }, 100);
@@ -110,14 +124,57 @@ export const UsersProvider = ({ children }) => {
       
     } catch (error) {
       console.error('Error al actualizar usuario:', error);
-      const errorMessage = 'Error al actualizar usuario';
+      const errorMessage = error.response?.data?.message || 'Error al actualizar usuario';
       setError(errorMessage);
       toast.current?.show({
         severity: 'error',
         summary: 'Error',
         detail: errorMessage,
         life: 3000
-      })
+      });
+      return { success: false, error: errorMessage };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUpdateRole = async (userId, newRole) => {
+    try {
+      setLoading(true);
+      
+      const response = await axios.put(`${API_URL}/${userId}/rol`, {
+        rol: newRole
+      }, {
+        headers: getAuthHeaders()
+      });
+      
+      toast.current?.show({
+        severity: 'success',
+        summary: 'Éxito',
+        detail: 'Rol actualizado correctamente',
+        life: 3000
+      });
+
+      // Actualizar el usuario en la lista local
+      setUsers(prevUsers => 
+        prevUsers.map(user => 
+          user.id === userId 
+            ? { ...user, rol: newRole, isAdmin: newRole === 'admin' }
+            : user
+        )
+      );
+      
+      return { success: true, data: response.data };
+      
+    } catch (error) {
+      console.error('Error al actualizar rol:', error);
+      const errorMessage = error.response?.data?.message || 'Error al actualizar rol';
+      toast.current?.show({
+        severity: 'error',
+        summary: 'Error',
+        detail: errorMessage,
+        life: 3000
+      });
       return { success: false, error: errorMessage };
     } finally {
       setLoading(false);
@@ -129,7 +186,10 @@ export const UsersProvider = ({ children }) => {
       setLoading(true);
       setError(null);
       
-      const response = await axios.delete(`${API_URL}/${id}`);
+      const response = await axios.delete(`${API_URL}/${id}`, {
+        headers: getAuthHeaders()
+      });
+      
       console.log('Usuario eliminado:', response.data);
       toast.current?.show({
         severity: 'success',
@@ -151,7 +211,7 @@ export const UsersProvider = ({ children }) => {
         summary: 'Error',
         detail: errorMessage,
         life: 3000
-      })
+      });
       return { success: false, error: errorMessage };
     } finally {
       setLoading(false);
@@ -160,7 +220,7 @@ export const UsersProvider = ({ children }) => {
   
   const startEdit = (user) => {
     setEditingUser(user);
-    setError(null); // Limpiar errores al empezar a editar
+    setError(null);
   };
 
   const clearError = () => {
@@ -168,8 +228,10 @@ export const UsersProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    getUsers();
-  }, []);
+    if (currentUser) {
+      getUsers();
+    }
+  }, [currentUser]);
 
   return (
     <UsersContext.Provider
@@ -177,6 +239,7 @@ export const UsersProvider = ({ children }) => {
         users,
         handleCreate,
         handleUpdate,
+        handleUpdateRole,
         handleDelete,
         editingUser,
         startEdit,
