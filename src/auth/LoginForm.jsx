@@ -6,10 +6,14 @@ import { InputText } from "primereact/inputtext"
 import { Password } from 'primereact/password';
 import { Card } from "primereact/card"
 import { Button } from "primereact/button"
-        
+import { useNavigate } from "react-router-dom"
+
+
 const LoginForm = () =>{
 
     const {login} = useContext(AuthContext)
+    const navigate = useNavigate()
+
 
     const initialValuesUser = {
         email:'',
@@ -43,6 +47,9 @@ const LoginForm = () =>{
                 </Form>
             )}
             </Formik>
+            <a style={{cursor:'pointer'}} onClick={() => navigate('/forgot-password')}>
+                <h4>¿Olvidaste tu contraseña?</h4>
+            </a>
         </Card>
     )
 

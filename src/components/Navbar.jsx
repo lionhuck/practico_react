@@ -21,6 +21,8 @@ function Navbar() {
       { label: 'Usuarios', icon: 'pi pi-users', url: '/users' },
       { label: 'Ventas', icon: 'pi pi-dollar', url: '/sales' },
       { label: 'Logout', icon: 'pi pi-sign-out', command: logout },
+      { label: 'Recuperar contraseña', icon: 'pi pi-key', url: '/forgot-password' },
+      { label: 'Restablecer contraseña', icon: 'pi pi-key', url: '/reset-password' },
     ];
   }
 

@@ -18,6 +18,8 @@ import RegisterForm from './auth/RegisterForm';
 import AuthProvider from './context/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
 import PublicRoute from './components/PublicRoute';
+import ForgotPassword from './auth/ForgotPassword';
+import ResetPassword from './auth/ResetPassword';
 
 function App() {
   return (
@@ -32,6 +34,12 @@ function App() {
           } />
           <Route path="/register" element={
             <PublicRoute><RegisterForm /></PublicRoute>
+          } />
+          <Route path="/forgot-password" element={
+            <PublicRoute><ForgotPassword /></PublicRoute>
+          } />
+          <Route path="/reset-password" element={
+            <PublicRoute><ResetPassword /></PublicRoute>
           } />
           <Route path="/" element={<Home />} />
 

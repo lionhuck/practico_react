@@ -75,11 +75,31 @@ const AuthProvider = ({ children }) => {
         navigate('/login');
     };
 
+
+    const forgotPassword = async (email) => {
+        try {
+            const response = await axios.post('http://localhost:3000/auth/forgot-password', { email });
+            if (response.status === 200) {
+                alert("Se ha enviado un link de recuperación a tu email");
+                return true
+            } else {
+                alert(response.data.message || "Error desconocido");
+                return false
+            }
+        } catch (error) {
+            console.error("Error en recuperar contraseña:", error);
+            const errorMsg = error.response?.data?.message || "Hubo un error al intentar recuperar la contraseña";
+            alert(errorMsg);
+            return false
+        }
+    }
+
+
     return (
-        <AuthContext.Provider value={{ user, setUser, register, login, logout }}>
+        <AuthContext.Provider value={{ user, setUser, register, login, logout, forgotPassword }}>
             {children}
         </AuthContext.Provider>
     );
-};
 
+}
 export default AuthProvider; 
